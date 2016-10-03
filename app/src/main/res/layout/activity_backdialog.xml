@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dip"
+    android:layout_height="200dip"
+    android:layout_centerInParent="true"
+    android:gravity="center">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="매물이 등록되었습니다."
+        android:textSize="20dp"
+        android:id="@+id/dialog_Text"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="23dp"
+        android:id="@+id/btnbackHome"
+        />
+
+</LinearLayout>

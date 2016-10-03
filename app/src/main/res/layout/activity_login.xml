@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    tools:context=".Activity_Signup">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/etEmail"
+            android:layout_centerHorizontal="true"
+            android:hint="Email"
+            android:layout_marginTop="151dp" />
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/etPassword"
+            android:layout_centerHorizontal="true"
+            android:hint="Password" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:text="로그인"
+            android:id="@+id/btnLogin" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:text="비밀번호 찾기"
+            android:id="@+id/btnPwfind" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:text="회원가입"
+            android:id="@+id/btnSignup"/>
+
+        <Button
+            android:onClick="onClick3"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:text="관리자 로그인"
+            android:id="@+id/btnMlogin" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

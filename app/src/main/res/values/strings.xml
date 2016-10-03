@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BuBang</string>
+    <string name="action_settings">Settings</string>
+    <string name="tab1">내 정보</string>
+    <string name="tab2">내 매물</string>
+    <string name="desc_success">성공</string>
+    <string name="desc_pwd_compare_fails">비밀번호가 맞지 않습니다.</string>
+    <string name="desc_email_check">이메일을 체크해주세요.</string>
+    <string name="desc_name_check">이름을 입력해주세요.</string>
+    <string name="desc_ph_need">핸드폰 번호를 입력해주세요.</string>
+    <string name="desc_name_need">이름을 입력해주세요.</string>
+    <string name="desc_pz_enter_email">이메일을 입력해주세요.</string>
+    <string name="desc_pz_enter_pwd">비밀번호를 입력해주세요.</string>
+</resources>

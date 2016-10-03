@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TabHost
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@android:id/tabhost">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TabWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@android:id/tabs"
+                android:tabStripEnabled="true"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@android:id/tabcontent"
+                android:layout_weight="1">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="611dp"
+                    android:orientation="vertical"
+                    android:id="@+id/tab1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="내 정보"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="이름 : 허도행"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:text="주소 : 경기도 안양시 동안구 시민대로159번길 59"
+                        android:textSize="30dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:text="메일주소 : zkfcm90@naver.com"
+                        android:textSize="40dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/tab2">
+
+                    <ImageView
+                        android:layout_width="353dp"
+                        android:layout_height="257dp"
+                        android:id="@+id/imageView"
+                        android:src="@drawable/image"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="1. 주소 : 강남구 도곡동"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="2. 평수 : 24평"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:text="3. 특징 : 최근에 수리하여 집이 매우 깨긋함"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="4. 금액 : 4천만원"
+                        android:textSize="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:text="5. 중앙부동산 : 031-386-0345"
+                        android:textSize="40dp"/>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</LinearLayout>

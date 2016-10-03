@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        android:weightSum="1">
+
+        <!--<com.nhn.android.maps.NMapView-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/mapView"-->
+            <!--android:apiKey="1EM5zbdBJvrJ5d5E1aP7"-->
+            <!--android:layout_weight="1" />-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:id="@+id/mapmap"-->
+        <!--android:orientation="vertical"/>-->
+
+
+    <!--<com.nhn.android.maps.NMapView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:id="@+id/mapView"-->
+        <!--android:apiKey="1EM5zbdBJvrJ5d5E1aP7"-->
+        <!--android:layout_weight="1" />-->
+
+    <!--<Button-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:text="버튼"-->
+        <!--android:layout_weight="1"/>-->
+
+</LinearLayout>

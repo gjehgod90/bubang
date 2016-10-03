@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:hint="Email"
+            android:layout_marginTop="151dp" />
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:hint="이름 입력"
+            android:layout_below="@+id/emailInput" />
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:hint="주민번호 입력"
+            android:layout_below="@+id/emailInput" />
+
+        <Button
+            android:onClick="onClick1"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:text="비밀번호 찾기"
+            android:id="@+id/Button"
+            android:textAllCaps="false"
+            android:layout_alignTop="@+id/Button2"
+            android:layout_alignEnd="@+id/Button2"
+            />
+    </LinearLayout>
+
+</LinearLayout>

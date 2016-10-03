@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:hint="시,구,동 입력"
+        android:id="@+id/check"/>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="80dp">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아파트"
+            android:id="@+id/checkBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="주택"
+            android:id="@+id/CheckBox"
+            android:layout_toRightOf="@+id/checkBox"
+            android:layout_gravity="right" />
+
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:text="검색"
+            android:id="@+id/Button"
+            android:textAllCaps="false"
+            android:layout_marginTop="30dp" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:text="매물양식"
+            android:id="@+id/BtnEnroll"
+            android:textAllCaps="false"
+            android:layout_toEndOf="@+id/Button"
+            android:layout_alignTop="@+id/Button"
+            android:layout_alignBottom="@+id/Button" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/list">
+        </ListView>
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:text="부동산 정보"
+        android:id="@+id/btnInfor"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
