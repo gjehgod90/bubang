@@ -54,7 +54,7 @@ public class Activity_Login extends AppCompatActivity {
         public void onClick(View view) {
             if (view.getId() == R.id.btnLogin) {
                 login();
-                startActivity(new Intent(Activity_Login.this, Activity_Main.class));
+//                startActivity(new Intent(Activity_Login.this, Activity_Main.class));
             }
             if (view.getId() == R.id.btnSignup) {
                 startSignupActivity();
@@ -63,8 +63,6 @@ public class Activity_Login extends AppCompatActivity {
                 startActivity(new Intent(Activity_Login.this, Activity_Pw.class));
             }
         }
-
-        ;
 
         public void startSignupActivity() {
             startActivity(new Intent(Activity_Login.this, Activity_Signup.class));
@@ -80,48 +78,44 @@ public class Activity_Login extends AppCompatActivity {
                 Toast.makeText(mContext, R.string.desc_pz_enter_pwd, Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            JSONObject mDataJO = new JSONObject();
+            String Email = etEmail.getText().toString();
+            String Pwd = etPassword.getText().toString();
+
+            try {
+                mDataJO.put("userId", Email);
+                mDataJO.put("pwd", Pwd);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+            final HttpComm mHttpComm = new HttpComm(mContext);
+            mHttpComm.setUrl(HttpURL.UserLogin);
+            mHttpComm.setQeryJO(mDataJO);
+            mHttpComm.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    if (mHttpComm.isSuccess()) {
+                        Toast.makeText(mContext, R.string.desc_success, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        Activity_Login.this.setResult(LOGIN_RESULT_SUCCESS, intent);//RESULT_OK를 돌려주면 MainActivity 에서 받는다.
+                        startActivity(new Intent(Activity_Login.this, Activity_Main.class));
+                        finish();
+                    } else {
+                        Toast.makeText(mContext, mHttpComm.mBodyS, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            mHttpComm.start();
         }
     };
 }
 
-//            JSONObject mDataJO = new JSONObject();
-//            String Email = etEmail.getText().toString();
-//            String Pwd = etPassword.getText().toString();
-//
-//            try {
-//                mDataJO.put("userId", Email);
-//                mDataJO.put("pwd", Pwd);
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
 
-
-
-//            final HttpComm mHttpComm = new HttpComm(mContext);
-//            mHttpComm.setUrl(HttpURL.UserLogin);
-//            mHttpComm.setQeryJO(mDataJO);
-//            mHttpComm.setRunnable(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (mHttpComm.isSuccess()) {
-//                        Toast.makeText(mContext, R.string.desc_success, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent();
-//                        Activity_Login.this.setResult(LOGIN_RESULT_SUCCESS, intent);//RESULT_OK를 돌려주면 MainActivity 에서 받는다.
-//                        startActivity(new Intent(Activity_Login.this, Activity_Main.class));
-//                        finish();
-//                    } else {
-//                        Toast.makeText(mContext, mHttpComm.mBodyS, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//            mHttpComm.start();
-//        }
-//    };
-//}
-
-
-//
 //        etEmail = (EditText) findViewById(R.id.etEmail);
 //        etPassword = (EditText) findViewById(R.id.etPassword);
 //        btnRegist = (Button) findViewById(R.id.btnRegist);
@@ -218,24 +212,6 @@ public class Activity_Login extends AppCompatActivity {
 //        }
 //    });
 //    mHttpComm.start();
-//}
-
-
-
-//    public void onClick1(View view) {
-//        Intent intent = new Intent(this, Activity_Pw.class);
-//        startActivity(intent);
-//    }
-//
-//    public void onClick2(View view) {
-//        Intent intent = new Intent(this, Activity_Signup.class);
-//        startActivity(intent);
-//    }
-//
-//    public void onClick3(View view) {
-//        Intent intent = new Intent(this, Activity_MasterLogin.class);
-//        startActivity(intent);
-//    }
 //}
 
 

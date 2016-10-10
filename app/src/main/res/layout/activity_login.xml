@@ -48,12 +48,12 @@
             android:text="회원가입"
             android:id="@+id/btnSignup"/>
 
-        <Button
-            android:onClick="onClick3"
-            android:layout_width="300dp"
-            android:layout_height="55dp"
-            android:text="관리자 로그인"
-            android:id="@+id/btnMlogin" />
+        <!--<Button-->
+            <!--android:onClick="onClick3"-->
+            <!--android:layout_width="300dp"-->
+            <!--android:layout_height="55dp"-->
+            <!--android:text="관리자 로그인"-->
+            <!--android:id="@+id/btnMlogin" />-->
 
     </LinearLayout>
 

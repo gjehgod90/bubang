@@ -59,7 +59,7 @@ import java.util.List;
 /**
  * Created by HeoDH on 2016-07-23.
  */
-public class Activity_Enrollment extends NMapActivity {
+public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCheckedChangeListener {
 
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
@@ -85,9 +85,19 @@ public class Activity_Enrollment extends NMapActivity {
     RadioButton etRb;
     RadioButton etRb1;
     RadioGroup etRgrp;
+    RadioGroup etType;
+    RadioButton etMr;
+    RadioButton etDps;
+    RadioButton etSP;
     ImageView imgView;
+    LinearLayout monthly;
+    LinearLayout charter;
+    LinearLayout Trading;
     String img;
     private RadioButton radioBT;
+    private RadioButton radioBT1;
+    private EditText textBT;
+
 //    ImageView etImg;
 
 
@@ -99,6 +109,11 @@ public class Activity_Enrollment extends NMapActivity {
 
 //        getSupportActionBar().setTitle("방 등록");
 
+        monthly = (LinearLayout) findViewById(R.id.monthly);
+        charter = (LinearLayout) findViewById(R.id.charter);
+        Trading = (LinearLayout) findViewById(R.id.Trading);
+
+
         etmapname = (EditText) findViewById(R.id.etmapname);
         etadress = (EditText) findViewById(R.id.etadress);
         etPrice = (EditText) findViewById(R.id.etPrice);
@@ -109,20 +124,32 @@ public class Activity_Enrollment extends NMapActivity {
         etRb = (RadioButton) findViewById(R.id.etRb);
         etRb1 = (RadioButton) findViewById(R.id.etRb1);
         etRgrp = (RadioGroup) findViewById(R.id.etRgrp);
+        etMr = (RadioButton) findViewById(R.id.etMr);
+        etDps = (RadioButton) findViewById(R.id.etDps);
+        etSP = (RadioButton) findViewById(R.id.etSp);
+        etType = (RadioGroup) findViewById(R.id.etType);
         imgView = (ImageView) findViewById(R.id.imgView);
+
+        findViewById(R.id.monthly).setVisibility(View.GONE);
+        findViewById(R.id.charter).setVisibility(View.GONE);
+        findViewById(R.id.Trading).setVisibility(View.GONE);
+
+        RadioGroup etType = (RadioGroup) findViewById(R.id.etType);
+        etType.setOnCheckedChangeListener(this);
 
 
         btnDialog = (Button) findViewById(R.id.btnDialog);
         btnDialog.setOnClickListener(mClickListener);
 
         buttonLP = (Button) findViewById(R.id.buttonLoadPicture);
-        mViewIV = (ImageView)findViewById(R.id.imgView);
+        mViewIV = (ImageView) findViewById(R.id.imgView);
         buttonLP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadImagefromGallery(mViewIV);
             }
         });
+
 
         mMapView = new NMapView(this);
         mMapView.setBuiltInZoomControls(true, null);
@@ -133,6 +160,28 @@ public class Activity_Enrollment extends NMapActivity {
         mLinearLayout.addView(mMapView);
 
     }
+    @Override
+    public void onCheckedChanged (RadioGroup arg0,int arg1){
+        // TODO Auto-generated method stub
+        switch (arg1) {
+            case R.id.etMr:
+                monthly.setVisibility(LinearLayout.VISIBLE);
+                charter.setVisibility(LinearLayout.VISIBLE);
+                Trading.setVisibility(LinearLayout.GONE);
+                break;
+            case R.id.etDps:
+                monthly.setVisibility(LinearLayout.VISIBLE);
+                charter.setVisibility(LinearLayout.GONE);
+                Trading.setVisibility(LinearLayout.GONE);
+                break;
+            case R.id.etSp:
+                monthly.setVisibility(LinearLayout.GONE);
+                charter.setVisibility(LinearLayout.GONE);
+                Trading.setVisibility(LinearLayout.VISIBLE);
+                break;
+
+            }
+        }
 
     public static Location findGeoPoint(Context mcontext, String address) {
         Location loc = new Location("");
@@ -247,7 +296,9 @@ public class Activity_Enrollment extends NMapActivity {
             String roomInfo = etroomInfo.getText().toString();
             String described = etdescribed.getText().toString();
             int ug_include = etRgrp.getCheckedRadioButtonId();
+            int Type = etType.getCheckedRadioButtonId();
             radioBT = (RadioButton) findViewById(ug_include);
+            radioBT1 = (RadioButton) findViewById(Type);
             int deposit = Integer.parseInt(etPrice.getText().toString());
             int monthly_rent = Integer.parseInt(etmonthly_rent.getText().toString());
             int acreage = Integer.parseInt(etacreage.getText().toString());
@@ -261,20 +312,12 @@ public class Activity_Enrollment extends NMapActivity {
             mDataJO.put("monthly_rent",monthly_rent);
             mDataJO.put("acreage",acreage);
             mDataJO.put("ug_include",radioBT.getText());
+            mDataJO.put("Type",radioBT1.getText());
             mDataJO.put("img",img);
             Log.e("dh","server req:\n"+mDataJO.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//        JSONArray mDataAR = new JSONArray();
-//
-//        Image img = Integer.parseInt(etImg.getimage().toString());
-//
-//        try {
-//            mDataAR.put(img);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         final HttpComm mHttpComm = new HttpComm(mContext);
         //서버 통신에 필요한 url 셋팅
