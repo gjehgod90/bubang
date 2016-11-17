@@ -93,24 +93,24 @@ public class Activity_Login extends AppCompatActivity {
 
 
 
-            final HttpComm mHttpComm = new HttpComm(mContext);
-            mHttpComm.setUrl(HttpURL.UserLogin);
-            mHttpComm.setQeryJO(mDataJO);
-            mHttpComm.setRunnable(new Runnable() {
+            final HttpComm mHttpComm = new HttpComm(mContext);  //mContext가 포함된 httpComm이라는 객체를 생성
+            mHttpComm.setUrl(HttpURL.UserLogin);    //mHttpComm에 있는 setUrl을 불러온다.(HttpURL에 UserLogin이 포함된.)
+            mHttpComm.setQeryJO(mDataJO);   //mHttpComm에 있는 setQerJo(mDataJO를 포함한)를 불러온다.
+            mHttpComm.setRunnable(new Runnable() {  //mhTttpComm에 있는 setRunnable 를 불러온다.
                 @Override
-                public void run() {
-                    if (mHttpComm.isSuccess()) {
-                        Toast.makeText(mContext, R.string.desc_success, Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
+                public void run() { //오버라이딩하여 런펑션을 재정의한다.
+                    if (mHttpComm.isSuccess()) {    //mHttpComm에 있는 isSuccess를 불러온다.
+                        Toast.makeText(mContext, R.string.desc_success, Toast.LENGTH_SHORT).show(); //입력한값이 트루라면 성공이라는 텍스트를 보여준다.
+                        Intent intent = new Intent();   //새로운 인텐트 객체 생성
                         Activity_Login.this.setResult(LOGIN_RESULT_SUCCESS, intent);//RESULT_OK를 돌려주면 MainActivity 에서 받는다.
-                        startActivity(new Intent(Activity_Login.this, Activity_Main.class));
-                        finish();
+                        startActivity(new Intent(Activity_Login.this, Activity_Main.class));    //성공하면 로그인엑티비티를 종료하고 메인엑티비티를 띄어준다.
+                        finish();   //엑티비티 종료
                     } else {
-                        Toast.makeText(mContext, mHttpComm.mBodyS, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mHttpComm.mBodyS, Toast.LENGTH_SHORT).show();  //실패하면 mBodS에 저장된 메시지를 출력.
                     }
                 }
             });
-            mHttpComm.start();
+            mHttpComm.start(); //mHttpComm 시작
         }
     };
 }

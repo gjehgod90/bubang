@@ -15,6 +15,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -25,14 +26,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import dohaeng.com.bubang.utils.HttpComm;
 import dohaeng.com.bubang.utils.HttpURL;
 import dohaeng.com.bubang.utils.utils;
 import dohaeng.com.bubang.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,14 +46,18 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.nhn.android.maps.NMapActivity;
+import com.nhn.android.maps.NMapCompassManager;
 import com.nhn.android.maps.NMapController;
+import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
 import com.nhn.android.maps.nmapmodel.NMapPlacemark;
+import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 
 import java.io.ByteArrayOutputStream;
@@ -101,11 +109,18 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
 //    ImageView etImg;
 
 
+    private NMapOverlayManager mOverlayManager;
+    private NMapMyLocationOverlay mMyLocationOverlay;
+    private NMapLocationManager mMapLocationManager;
+    private NMapCompassManager mMapCompassManager;
+    private NMapViewerResourceProvider mMapViewerResourceProvider;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitiy_enrollment);
+
 
 //        getSupportActionBar().setTitle("방 등록");
 
@@ -156,12 +171,145 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
         mMapView.setClickable(true);
         mMapView.setApiKey(API_KEY);
 
-        mLinearLayout = (LinearLayout)findViewById(R.id.mapmap);
+        mLinearLayout = (LinearLayout) findViewById(R.id.mapmap);
         mLinearLayout.addView(mMapView);
 
+        super.setMapDataProviderListener(onDataProviderListener);
+//        mMapView.setOnMapStateChangeListener(this);
+        // 지도에 대한 상태 변경 이벤트 연결
+
+        // create resource provider
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
+        mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
+
+        // location manager
+        mMapLocationManager = new NMapLocationManager(this);
+        mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
+
+        // compass manager
+        mMapCompassManager = new NMapCompassManager(this);
+
+        // create my location overlay
+        mMyLocationOverlay = mOverlayManager.createMyLocationOverlay(mMapLocationManager, mMapCompassManager);
+
+        startMyLocation();
+
     }
+
+    private final NMapView.OnMapStateChangeListener onMapViewStateChangeListener = new NMapView.OnMapStateChangeListener() {
+        @Override
+        public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
+            if (errorInfo == null) { // success
+                startMyLocation();//현재위치로 이동
+                mMapController.setMapCenter(new NGeoPoint(126.978371, 37.5666091), 14);
+            } else { // fail
+                android.util.Log.e("NMAP", "onMapInitHandler: error=" + errorInfo.toString());
+            }
+        }
+
+        @Override
+        public void onMapCenterChange(NMapView nMapView, NGeoPoint nGeoPoint) {
+
+        }
+
+        @Override
+        public void onMapCenterChangeFine(NMapView nMapView) {
+
+        }
+
+        @Override
+        public void onZoomLevelChange(NMapView nMapView, int i) {
+
+        }
+
+        @Override
+        public void onAnimationStateChange(NMapView nMapView, int i, int i1) {
+
+        }
+    };
+
+    private void startMyLocation() {
+        boolean isMyLocationEnabled = mMapLocationManager.enableMyLocation(true);
+        if (!isMyLocationEnabled) {
+            Toast.makeText(
+                    Activity_Enrollment.this,
+                    "시스템에서 GPS설정을 활성화 하세요.", Toast.LENGTH_LONG).show();
+
+            Intent goToSettings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(goToSettings);
+        } else {
+
+        }
+    }
+
+    private void stopMyLocation() {
+        if (mMyLocationOverlay != null) {
+            mMapLocationManager.disableMyLocation();
+
+            if (mMapView.isAutoRotateEnabled()) {
+                mMyLocationOverlay.setCompassHeadingVisible(false);
+
+                mMapView.setAutoRotateEnabled(false, false);
+
+                mLinearLayout.requestLayout();
+            }
+            onPause();
+        }
+    }
+
+    private final NMapActivity.OnDataProviderListener onDataProviderListener = new NMapActivity.OnDataProviderListener() {
+
+        @Override
+        public void onReverseGeocoderResponse(NMapPlacemark placeMark, NMapError errInfo) {
+
+            if (errInfo != null) {
+                Log.e("myLog", "Failed to findPlacemarkAtLocation: error=" + errInfo.toString());
+                Toast.makeText(Activity_Enrollment.this, errInfo.toString(), Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                Toast.makeText(Activity_Enrollment.this, placeMark.toString(), Toast.LENGTH_LONG).show();
+
+            }
+        }
+    };
+
+
+    private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
+
+        @Override
+        public boolean onLocationChanged(NMapLocationManager locationManager, NGeoPoint myLocation) {
+
+            if (mMapController != null) {
+                mMapController.animateTo(myLocation);
+            }
+            Log.d("myLog", "myLocation  lat " + myLocation.getLatitude());
+            Log.d("myLog", "myLocation  lng " + myLocation.getLongitude());
+
+//            findPlacemarkAtLocation(myLocation.getLongitude(), myLocation.getLatitude());
+            //위도경도를 주소로 변환
+            return true;
+        }
+
+        @Override
+        public void onLocationUpdateTimeout(NMapLocationManager locationManager) {
+
+            Toast.makeText(Activity_Enrollment.this, "현재위치를 검색 할 수 없습니다.",
+                    Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onLocationUnavailableArea(NMapLocationManager locationManager, NGeoPoint myLocation) {
+
+            Toast.makeText(Activity_Enrollment.this,
+                    "현재위치는 지도상에 표시할 수 없는 지역입니다.", Toast.LENGTH_LONG).show();
+            stopMyLocation();
+        }
+    };
+
+
     @Override
-    public void onCheckedChanged (RadioGroup arg0,int arg1){
+    public void onCheckedChanged(RadioGroup arg0, int arg1) {
         // TODO Auto-generated method stub
         switch (arg1) {
             case R.id.etMr:
@@ -180,31 +328,8 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
                 Trading.setVisibility(LinearLayout.VISIBLE);
                 break;
 
-            }
         }
-
-    public static Location findGeoPoint(Context mcontext, String address) {
-        Location loc = new Location("");
-        Geocoder coder = new Geocoder(mcontext);
-        List<Address> addr = null;// 한좌표에 대해 두개이상의 이름이 존재할수있기에 주소배열을 리턴받기 위해 설정
-        try {
-                addr = coder.getFromLocationName(address, 5);
-            } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            }// 몇개 까지의 주소를 원하는지 지정 1~5개 정도가 적당
-        if (addr != null) {
-            for (int i = 0; i < addr.size(); i++) {
-                Address lating = addr.get(i);
-                double lat = lating.getLatitude(); // 위도가져오기
-                double lon = lating.getLongitude(); // 경도가져오기
-                loc.setLatitude(lat);
-                loc.setLongitude(lon);
-                }
-            }
-        return loc;
-        }
-
+    }
 
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
@@ -232,7 +357,6 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -256,11 +380,11 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
                 cursor.close();
                 ImageView imgView = (ImageView) findViewById(R.id.imgView);
                 // Set the Image in ImageView after decoding the String
-                Log.e("gm",imgDecodableString); // /storage/emulated/0/DCIM/Screenshots/Screenshot_20160921-013909.png
+                Log.e("gm", imgDecodableString); // /storage/emulated/0/DCIM/Screenshots/Screenshot_20160921-013909.png
 
                 imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
 
-                img =getStringFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                img = getStringFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
 
             } else {
                 Toast.makeText(this, "You haven't picked Image",
@@ -279,50 +403,49 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
         bitmapPicture.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
         byte[] b = byteArrayBitmapStream.toByteArray();
         encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        Log.e("dh","encodedImage:\n"+encodedImage);
+        Log.e("dh", "encodedImage:\n" + encodedImage);
         return encodedImage;
     }
 
 
-
-
-
     public void EnollmentUser() {
 
-            JSONObject mDataJO = new JSONObject();
+        final JSONObject mDataJO = new JSONObject();
 
-            String adress = etmapname.getText().toString();
-            String adress_descript = etadress.getText().toString();
-            String roomInfo = etroomInfo.getText().toString();
-            String described = etdescribed.getText().toString();
-            int ug_include = etRgrp.getCheckedRadioButtonId();
-            int Type = etType.getCheckedRadioButtonId();
-            radioBT = (RadioButton) findViewById(ug_include);
-            radioBT1 = (RadioButton) findViewById(Type);
-            int deposit = Integer.parseInt(etPrice.getText().toString());
-            int monthly_rent = Integer.parseInt(etmonthly_rent.getText().toString());
-            int acreage = Integer.parseInt(etacreage.getText().toString());
+        String adress = etmapname.getText().toString();
+        String adress_descript = etadress.getText().toString();
+        String roomInfo = etroomInfo.getText().toString();
+        String described = etdescribed.getText().toString();
+        int ug_include = etRgrp.getCheckedRadioButtonId();
+        int Type = etType.getCheckedRadioButtonId();
+        radioBT = (RadioButton) findViewById(ug_include);
+        radioBT1 = (RadioButton) findViewById(Type);
+        int deposit = Integer.parseInt(etPrice.getText().toString());
+        int monthly_rent = Integer.parseInt(etmonthly_rent.getText().toString());
+        int acreage = Integer.parseInt(etacreage.getText().toString());
 
         try {
-            mDataJO.put("adress",adress);
-            mDataJO.put("adress_descript",adress_descript);
-            mDataJO.put("deposit",deposit);
-            mDataJO.put("roomInfo",roomInfo);
-            mDataJO.put("described",described);
-            mDataJO.put("monthly_rent",monthly_rent);
-            mDataJO.put("acreage",acreage);
-            mDataJO.put("ug_include",radioBT.getText());
-            mDataJO.put("Type",radioBT1.getText());
-            mDataJO.put("img",img);
-            Log.e("dh","server req:\n"+mDataJO.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            mDataJO.put("adress", adress);
+            mDataJO.put("adress_descript", adress_descript);
+            mDataJO.put("deposit", deposit);
+            mDataJO.put("roomInfo", roomInfo);
+            mDataJO.put("described", described);
+            mDataJO.put("monthly_rent", monthly_rent);
+            mDataJO.put("acreage", acreage);
+            mDataJO.put("ug_include", radioBT.getText());
+            mDataJO.put("Type", radioBT1.getText());
+            mDataJO.put("img", img);
+            mDataJO.put("key", "안양시 동안구 부흥동 은하수청구");
+            Log.e("dh", "server req:\n" + mDataJO.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         final HttpComm mHttpComm = new HttpComm(mContext);
         //서버 통신에 필요한 url 셋팅
-        mHttpComm.setUrl(HttpURL.UserEnrollment);
-
+//        mHttpComm.setUrl(HttpURL.UserEnrollment);
+        mHttpComm.setUrl(HttpURL.Nmapaddress);
         //서버 통신에 필요한 데이터
         mHttpComm.setQeryJO(mDataJO);
         //서버 통신 후 할일을 등록
@@ -330,17 +453,13 @@ public class Activity_Enrollment extends NMapActivity implements RadioGroup.OnCh
             @Override
             public void run() {
                 // 성공 여부 확인
-                if(mHttpComm.isSuccess())
-
+                if (mHttpComm.isSuccess())
                 {
                     //성공시
                     Toast.makeText(mContext, R.string.desc_success, Toast.LENGTH_SHORT).show();
                     Activity_Enrollment.this.finish();
-                }
-
-                else
-
-                {
+                    Log.e("ddhdh", "server req:\n" + mDataJO.toString());
+                } else {
                     //실패시
                     Toast.makeText(mContext, mHttpComm.mBodyS, Toast.LENGTH_SHORT).show();
                 }

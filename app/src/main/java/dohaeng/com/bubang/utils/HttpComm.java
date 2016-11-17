@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * 서버에 통신을 하는 쓰레드 입니다.
@@ -21,6 +22,7 @@ public class HttpComm extends Thread {
     Context mContext;
 
     String DefaultURL = "http://bullswiz.com:10554";
+//    String MapURL = "http://bullswiz.com:10444";
     String mUrlS;
 
     // 통신이 끝나고 나서 적용하기 위한 변수
@@ -58,6 +60,7 @@ public class HttpComm extends Thread {
     }
     public void setUrl(String urlS){
         this.mUrlS = DefaultURL+urlS;
+
     }
     public void setQeryJO(JSONObject qeryJO){
             this.mQeryJO = qeryJO;
